@@ -1,4 +1,5 @@
 import os
+import logging
 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
@@ -6,6 +7,8 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class BasePage():
 
@@ -34,6 +37,7 @@ class BasePage():
                     self._driver = webdriver.Chrome()
             else:
                 self._driver = driver
+        logger.info("初始化浏览器， 当前使用的浏览器为{browser}".format(browser=browser))
         self._driver.maximize_window()
         self._driver.implicitly_wait(5)
         if self._url != "":
@@ -43,6 +47,7 @@ class BasePage():
         WebDriverWait(self._driver, 10).until(expected_conditions.visibility_of_element_located(locator))
 
     def find(self, locator, value=None, group=False):
+        logger.info("当前查找元素为：{locator}, {value}".format(locator=locator, value=value))
         if group:
             if isinstance(locator, tuple):
                 self.__wait(locator)
@@ -62,6 +67,7 @@ class BasePage():
         self._driver.close()
 
     def move_to(self, locator:tuple): # 某些元素需要将鼠标移动到特定元素才能显现操作
+        logger.info("移动鼠标至：{locator}".format(locator=locator))
         element = self.find(locator)
         ActionChains(self._driver).move_to_element(element).perform()
 
