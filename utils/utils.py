@@ -2,6 +2,7 @@ import os
 
 import allure
 import pymysql
+import requests
 from selenium.webdriver.remote.webdriver import WebDriver
 
 
@@ -14,6 +15,16 @@ def attach(driver: WebDriver, name):
     driver.get_screenshot_as_file(temp_name)
     allure.attach.file(temp_name, attachment_type=allure.attachment_type.PNG, name=name)
     os.remove(temp_name)
+
+
+def cookies():
+    '''
+    维护一个cookies的方法， 增加， 更新
+    根据具体项目维护方法
+    :return:
+    '''
+    r = requests.request()
+    pass
 
 
 class AttachVideo():
