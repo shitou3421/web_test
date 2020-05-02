@@ -4,7 +4,7 @@ import pytest
 from page.demo_1 import Demo
 
 
-class TestDemo():
+class TestDemo:
     def setup(self):
         self.demo = Demo(reuse=True)
 
@@ -15,5 +15,6 @@ class TestDemo():
         content = self.demo.go_contacts().get_add_text()
         assert text in content
 
+    @pytest.mark.ignore
     def test_move(self):
         self.demo.go_contacts().move_to_list()

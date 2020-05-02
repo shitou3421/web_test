@@ -1,6 +1,7 @@
 import os
 
 import allure
+import pymysql
 from selenium.webdriver.remote.webdriver import WebDriver
 
 
@@ -9,7 +10,7 @@ def attach(driver: WebDriver, name):
     截图并保存到allure报告上
     '''
     temp_name = "xx.png"
-    name = "步骤" + repr(name) # 强制转换为字符串
+    name = "步骤" + repr(name)  # 强制转换为字符串
     driver.get_screenshot_as_file(temp_name)
     allure.attach.file(temp_name, attachment_type=allure.attachment_type.PNG, name=name)
     os.remove(temp_name)
@@ -24,20 +25,33 @@ class AttachVideo():
 
 class Mysql():
     '''
-    mysql相关的操作
+    mysql的连接
+    ip = "127.0.0.1"
+    username = "root"
+    password = "mysql"
+    db = "test_db"
+    db = Mysql().connect(ip, username, password, db)
+    db.execute("create table test_one (`id` int auto_increment not null primary key, `name` varchar(30) not null);")
     '''
 
-    def connect(self):
+    def connect(self, ip, username, password, db):
+        self.cursor = pymysql.connect(ip, username, password, db).cursor()
+        return self.cursor
+
+    def preset_data(self):
+        '''
+        前置准备数据
+        :return:
+        '''
         pass
 
-    def disconnect(self):
+    def post_data(self):
+        '''
+        后置清理数据
+        :return:
+        '''
         pass
 
-    def read(self):
-        pass
-
-    def insert(self):
-        pass
 
 
 class Redis():
@@ -55,3 +69,15 @@ class Redis():
 
     def insert(self):
         pass
+
+    def delete(self):
+        pass
+
+# if __name__ == '__main__':
+#     ip = "127.0.0.1"
+#     username = "root"
+#     password = "mysql"
+#     db = "test_db"
+#     db = Mysql().connect(ip, username, password, db)
+#     db.execute("create table test_one (`id` int auto_increment not null primary key, `name` varchar(30) not null);")
+#     db.close()
