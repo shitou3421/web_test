@@ -7,6 +7,8 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+from utils.utils import *
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -37,7 +39,6 @@ class BasePage():
                     self._driver = webdriver.Chrome()
             else:
                 self._driver = driver
-        logger.info("初始化浏览器， 当前使用的浏览器为{browser}".format(browser=browser))
         self._driver.maximize_window()
         self._driver.implicitly_wait(5)
         if self._url != "":
@@ -45,6 +46,7 @@ class BasePage():
 
     def __wait(self, locator:tuple):
         WebDriverWait(self._driver, 10).until(expected_conditions.visibility_of_element_located(locator))
+        attach(self._driver)  # 做到每一步都截图记录到allure报告上
 
     def find(self, locator, value=None, group=False):
         logger.info("当前查找元素为：{locator}, {value}".format(locator=locator, value=value))
