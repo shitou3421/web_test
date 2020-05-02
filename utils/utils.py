@@ -4,13 +4,14 @@ import allure
 from selenium.webdriver.remote.webdriver import WebDriver
 
 
-def attach(driver: WebDriver):
+def attach(driver: WebDriver, name):
     '''
     截图并保存到allure报告上
     '''
     temp_name = "xx.png"
+    name = "步骤" + repr(name) # 强制转换为字符串
     driver.get_screenshot_as_file(temp_name)
-    allure.attach.file(temp_name, attachment_type=allure.attachment_type.PNG)
+    allure.attach.file(temp_name, attachment_type=allure.attachment_type.PNG, name=name)
     os.remove(temp_name)
 
 

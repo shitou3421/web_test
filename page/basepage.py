@@ -1,15 +1,13 @@
-import os
 import logging
 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
-from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
 from utils.utils import *
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 class BasePage():
@@ -46,7 +44,7 @@ class BasePage():
 
     def __wait(self, locator:tuple):
         WebDriverWait(self._driver, 10).until(expected_conditions.visibility_of_element_located(locator))
-        attach(self._driver)  # 做到每一步都截图记录到allure报告上
+        attach(self._driver, name=locator)  # 做到每一步都截图记录到allure报告上
 
     def find(self, locator, value=None, group=False):
         logger.info("当前查找元素为：{locator}, {value}".format(locator=locator, value=value))
