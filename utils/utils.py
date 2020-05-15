@@ -17,15 +17,6 @@ def attach(driver: WebDriver, name):
     os.remove(temp_name)
 
 
-def cookies():
-    '''
-    维护一个cookies的方法， 增加， 更新
-    根据具体项目维护方法
-    :return:
-    '''
-    r = requests.request()
-    pass
-
 
 class AttachVideo():
     '''

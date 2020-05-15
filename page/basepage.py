@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
@@ -41,6 +42,13 @@ class BasePage():
         self._driver.implicitly_wait(5)
         if self._url != "":
             self._driver.get(self._url)
+        try:
+            self.setcookies()
+            sleep(3)
+        except Exception as e:
+            pass
+        finally:
+            self._driver.refresh()
 
     def __wait(self, locator:tuple):
         WebDriverWait(self._driver, 10).until(expected_conditions.visibility_of_element_located(locator))
@@ -71,4 +79,17 @@ class BasePage():
         element = self.find(locator)
         ActionChains(self._driver).move_to_element(element).perform()
 
+    def getcookies(self):
+        cookies = self._driver.get_cookies()
+        with open("cookies.txt", "w+") as f:
+            for cookie in cookies:
+                print(cookie)
+                cookie = str(cookie)
+                f.write(cookie + "\n")
 
+    def setcookies(self):
+        with open("cookies.txt", "r+") as f:
+            for line in f:
+                cookie = eval(line.strip())
+                print(cookie)
+                self._driver.add_cookie(cookie)
