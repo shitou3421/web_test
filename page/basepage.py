@@ -2,7 +2,7 @@ import logging
 from time import sleep
 
 from selenium import webdriver
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, DesiredCapabilities
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -15,7 +15,7 @@ class BasePage():
 
     _url = ""
 
-    def __init__(self, driver: WebDriver = None, reuse=False):
+    def __init__(self, driver: WebDriver = None, reuse=False, remote=False):
         # 浏览器的重用， 多浏览器的支持，
         browser = os.getenv("browser", "")
         if browser == "firefox":
@@ -32,7 +32,13 @@ class BasePage():
             if driver is None:
                 if reuse:
                     options = webdriver.ChromeOptions()
-                    options.debugger_address = "127.0.0.1:9999"  # 使用已打开的浏览器进行调试
+                    # options.debugger_address = "127.0.0.1:9999"  # 使用已打开的浏览器进行调试
+                    if remote:
+                        self._driver = webdriver.Remote(
+                            command_executor="http://10.1.1.248:4444/wd/hub",
+                            desired_capabilities=DesiredCapabilities.CHROME,
+                            options=options,
+                        )
                     self._driver = webdriver.Chrome(options=options)
                 else:
                     self._driver = webdriver.Chrome()
